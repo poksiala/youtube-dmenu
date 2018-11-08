@@ -2,14 +2,14 @@
 Your Youtube subscriptions in dmenu
 
 ## Instructions
-First off download your youtube subscriptions from the bottom of this page https://www.youtube.com/subscription_manager and save the file somewhere.
+First off download your Youtube subscriptions from the bottom of this page https://www.youtube.com/subscription_manager and save the file somewhere.
 This file does not update automaticly so if you change your subscriptions on the site you have to redownload it.
 
-The following instructions expect that path to your `subscription_manager` file is `~/subscription_manager` and bot `updateytsubs` and `selectytvideo` are located in `~/.scripts/` folder.
+The following instructions expect that path to your `subscription_manager` file is `~/subscription_manager` and both `updateytsubs` and `selectytvideo` are located in `~/.scripts/` folder.
 
 Running `updateytsubs` list all your subscription video details to `~/.youtubesubs`.
 You must give it path to the `subscription_manager` as the first argument.
-It is best to create a cronjob. For example to run every 15 minutes run `crontab -e` and add something on the lines of:
+It is best to create a cronjob for this. For example to update every 15 minutes run `crontab -e` and add something on the lines of:
 ```
 */15 * * * * ~/.scripts/updateytsubs ~/subscription_manager
 ```
