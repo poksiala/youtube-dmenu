@@ -26,6 +26,7 @@ fetched="$(cat $1 \
 		-e "s/\(.*\)<title>\(.*\)<\/title>\(.*\)/\1\3\t\2/" \
 		-e "s/\(.*\)<yt:videoId>\(.*\)<\/yt:videoId>\(.*\)/\1\3\t\2/" \
 		-e "s/^\s*//" \
+		-e 's/\&quot;/"/g' -e 's/\&amp;/\&/g' \
 	)"
 
 combined="$(echo -e "$fetched" | cat - ~/.youtubesubs | sort -u | sort -rn)"
