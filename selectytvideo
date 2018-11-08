@@ -1,8 +1,13 @@
 #! /bin/bash
 
-cat ~/.youtubesubs \
-	| sed -e 's/\t/ - /g' \
-	| dmenu -i -l 20 \
+# strip timestamps and identifiers. Replace tabs with dashes
+options="$(cat ~/.youtubesubs | cut -f 2,3 | sed -e 's/\t/ - /g')"
+
+# present dmenu
+selected="$(echo "$options" | dmenu -i -l 20)"
+
+# make similar transformations again and match the selection. Return url
+cat ~/.youtubesubs | sed -e 's/\t/ - /g' | grep "$selected" \
 	| rev | cut -d ' ' -f 1 | rev \
 	| sed -e 's/^/https:\/\/www\.youtube\.com\/watch\?v=/'
 
