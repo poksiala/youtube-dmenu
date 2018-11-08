@@ -1,0 +1,8 @@
+#! /bin/bash
+
+cat ~/.youtubesubs \
+	| sed -e 's/\t/ - /g' \
+	| dmenu -i -l 20 \
+	| rev | cut -d ' ' -f 1 | rev \
+	| sed -e 's/^/https:\/\/www\.youtube\.com\/watch\?v=/'
+

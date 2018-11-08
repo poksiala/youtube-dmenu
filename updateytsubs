@@ -1,0 +1,31 @@
+#! /bin/bash
+# Run this in cron
+# First parameter is path your subscription_manager file downloadable from 
+# Youtube https://www.youtube.com/subscription_manager (Bottom of the page)
+# It updates ~/.youtubesubs
+
+# test network connectivity
+ping -q -w 1 -c 1 youtube.com > /dev/null || exit 1
+
+# test that the file given as a parameter is atleast somewhat correct
+if [ "$(grep 'opml' $1 | wc -l)" -eq 0 ]; then
+	echo "invalid parameter"
+	exit 1
+fi
+
+cat $1 \
+	| sed -e 's/\"/\n/g' -e 's/;//g'  \
+	| grep https \
+	| sed -e 's/^/curl -s /' | sh \
+	| grep -A 16 "<entry>" \
+	| grep  "<name>\|<title>\|<yt:videoId>\|<published>" \
+	| paste - - - - \
+	| sed \
+		-e "s/\(.*\)<published>\(.*\)<\/published>\(.*\)/\1\3\t\2/" \
+		-e "s/\(.*\)<name>\(.*\)<\/name>\(.*\)/\1\3\t\2/" \
+		-e "s/\(.*\)<title>\(.*\)<\/title>\(.*\)/\1\3\t\2/" \
+		-e "s/\(.*\)<yt:videoId>\(.*\)<\/yt:videoId>\(.*\)/\1\3\t\2/" \
+		-e "s/^\s*//" \
+	| sort -rn \
+	| cut -f 2,3,4 > ~/.youtubesubs
+
