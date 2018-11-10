@@ -7,7 +7,7 @@ options="$(cat ~/.youtubesubs | cut -f 2,3 | sed -e 's/\t/ - /g')"
 selected="$(echo "$options" | dmenu -i -l 20)"
 
 # make similar transformations again and match the selection. Return url
-cat ~/.youtubesubs | sed -e 's/\t/ - /g' | grep "$selected" \
-	| rev | cut -d ' ' -f 1 | rev \
+cat ~/.youtubesubs | sed -e 's/\t/ - /2' | grep "$selected" \
+	| cut -f 3 \
 	| sed -e 's/^/https:\/\/www\.youtube\.com\/watch\?v=/'
 
