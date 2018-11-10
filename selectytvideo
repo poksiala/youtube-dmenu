@@ -1,5 +1,9 @@
 #! /bin/bash
 
+YT_FOLDER="$HOME/Videos/yt/"
+FILE_EXTENSION='mp4'
+
+
 # strip timestamps and identifiers. Replace tabs with dashes
 options="$(cat ~/.youtubesubs | cut -f 2,3 | sed -e 's/\t/ - /g')"
 
@@ -10,5 +14,16 @@ selected="$(echo "$options" | dmenu -i -l 20)"
 video_id="$(cat ~/.youtubesubs | sed -e 's/\t/ - /2' | grep "$selected" \
 	| cut -f 3)"
 
-echo "$video_id" | sed -e 's/^/https:\/\/www\.youtube\.com\/watch\?v=/'
+video_url="$(echo "$video_id" | sed -e 's/^/https:\/\/www\.youtube\.com\/watch\?v=/')"
 
+author="$(grep "$video_id" ~/.youtubesubs | cut -f 2)"
+title="$(grep "$video_id" ~/.youtubesubs | cut -f 3)"
+video_path="$author/$title.$FILE_EXTENSION"
+full_path="$(echo "$video_path" | sed -e 's|^|'$YT_FOLDER'|')"
+
+# if exist, echo path. Else echo url
+if [ -e "$full_path" ]; then
+	echo "$full_path"
+else
+	echo "$video_url"
+fi
