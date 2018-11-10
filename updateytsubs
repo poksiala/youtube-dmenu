@@ -29,6 +29,6 @@ fetched="$(cat $1 \
 		-e 's/\&quot;/"/g' -e 's/\&amp;/\&/g' \
 	)"
 
-combined="$(echo -e "$fetched" | cat - ~/.youtubesubs | sort -u | sort -rn)"
+combined="$(echo -e "$fetched" | cat - ~/.youtubesubs | sort -u -k4,4 | sort -rn)"
 
 echo "$combined" > ~/.youtubesubs
