@@ -1,0 +1,28 @@
+#! /bin/bash
+
+
+YT_FOLDER="$HOME/Videos/yt/"
+FILE_EXTENSION='mp4'
+
+
+
+while read -r l; do
+	author="$(echo "$l" | cut -f 2)"
+	title="$(echo "$l" | cut -f 3)"
+	video_path="$author/$title.$FILE_EXTENSION"
+	full_path="$YT_FOLDER$video_path"
+	video_url="$(echo "$l" | cut -f 4 | sed -e 's/^/https:\/\/www\.youtube\.com\/watch\?v=/')"
+	echo $full_path
+	if [ -e "$full_path" ]; then
+		echo "video already exists at $full_path"
+	else
+		youtube-dl --add-metadata \
+			--embed-thumbnail \
+			--format "$FILE_EXTENSION" \
+			-o "$( echo "$full_path" | sed -e 's/%/%%/g')" \
+			"$video_url"
+		sleep 1
+	fi
+
+done < ~/.youtubesubs
+
